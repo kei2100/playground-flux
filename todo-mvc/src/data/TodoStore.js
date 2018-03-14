@@ -13,7 +13,10 @@ class TodoStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Immutable.OrderedMap();
+    return {
+      draft: '',
+      todos: Immutable.OrderedMap(),
+    };
   }
 
   reduce(state, action) {
@@ -23,20 +26,29 @@ class TodoStore extends ReduceStore {
           return state
         }
         const id = Counter.increment();
-        return state.set(id, new Todo({
-          id,
-          text: action.text,
-          complete: false,
-        }));
-
+        return {
+          draft: '',
+          todos: state.todos.set(id, new Todo({
+            id,
+            text: action.text,
+            complete: false,
+          })),
+        };
       case TodoActionTypes.DELETE_TODO:
-        return state.delete(action.id);
-
+        return {
+          ...state,
+          todos: state.todos.delete(action.id),
+        };
       case TodoActionTypes.TOGGLE_TODO:
-        return state.update(
-          action.id,
-          todo => todo.set('complete', !todo.complete),
-        );
+        return {
+          ...state,
+          todos: state.todos.update(action.id, todo => todo.set('complete', !todo.complete)),
+        };
+      case TodoActionTypes.UPDATE_DRAFT:
+        return {
+          ...state,
+          draft: action.text,
+        };
       default:
         return state;
     }
