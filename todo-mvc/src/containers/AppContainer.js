@@ -9,6 +9,7 @@ import TodoDraftStore from '../data/TodoDraftStore'
 function getStores() {
   return [
     TodoStore,
+    TodoDraftStore,
   ];
 }
 
@@ -18,8 +19,8 @@ function getState() {
     draft: TodoDraftStore.getState(),
     onDeleteTodo: TodoActions.deleteTodo,
     onToggleTodo: TodoActions.toggleTodo,
-    onAdd: () => {console.log('onadd!')},
-    onUpdateDraft: () => {console.log('onupdate!!')},
+    onAdd: TodoActions.addTodo,
+    onUpdateDraft: TodoActions.updateDraft,
   };
 }
 
